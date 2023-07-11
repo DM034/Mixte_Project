@@ -6,6 +6,7 @@
   <title>Document</title>
 </head>
 <body>
+  <p><button type="button" class="btn col-sm-2 btn-dark btn-icon-text" style="margin-left: 12cm;margin-top: 0.5cm;"> Exportation PDF <i class="mdi mdi-file-check btn-icon-append"></i></button></p>
 <div class="row">
               <div class="col-sm-4 stretch-card grid-margin">
                 <div class="card">

@@ -20,7 +20,6 @@
         </form>
         <div class="card-body">
             <h4 class="card-title">Liste des codes avec montant</h4>
-        </p>
         <div class="table-responsive">
             <table class="table table-bordered">
             <thead>
