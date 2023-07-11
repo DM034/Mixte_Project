@@ -10,6 +10,7 @@
 </head>
 
 <body>
+
     <style>
         #chart1 {
             width: 350px;

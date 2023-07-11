@@ -16,14 +16,16 @@ class ControllerStatistique extends CI_Controller {
         $this->load->Model('Statistique');
 
         $val = $this->Statistique->getStatistiqueMontant();
-        $date = "";
-        $montant = "";
+
+        $date = "'";
+        $montant = "'";
         for ($i=0; $i < count($val); $i++) {
-            $date = "'".$date.$val[$i]->dateEntree."'" ;
-            $montant = "'".$montant.$val[$i]->montant."'" ;
+            $date = $date.$val[$i]->dateEntree."'" ;
+            $montant = $montant.$val[$i]->montant."'" ;
             if($i<count($val)-1){
-                $date = $date.",";
-                $montant = $montant.",";
+                $date = $date.",'";
+                $montant = $montant.",'";
+
             }
         }
 

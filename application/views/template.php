@@ -39,7 +39,9 @@
               <span class="font-weight-semibold mb-1 mt-2 text-center">
                 <?php echo ($client[0]->nom . ' ' . $client[0]->prenom);
                 ?></span>
-              <span class="text-secondary icon-sm text-center"><?php echo number_format($monnaie,0,"."," ");?> AR</span>
+
+              <span class="text-secondary icon-sm text-center"><?php echo number_format($monnaie, 0, ".", " "); ?> AR</span>
+
             </div>
           </a>
         </li>
@@ -104,6 +106,11 @@
           <li class="nav-item nav-logout d-none d-md-block">
             <h2 style="margin-right: 15cm;">Regime</h2>
           </li>
+
+          <li class="nav-item nav-logout d-none d-md-block">|ETU001808|</li>
+          <li class="nav-item nav-logout d-none d-md-block">|ETU001833|</li>
+          <li class="nav-item nav-logout d-none d-md-block">|ETU001866|</li>
+
           <li class="nav-item nav-logout d-none d-md-block mr-3">
             <a class="nav-link text-danger font-weight-bold" href="<?php echo base_url('AdminController/deconnexion'); ?>">Log out</a>
           </li>
