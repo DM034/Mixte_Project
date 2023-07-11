@@ -5,6 +5,43 @@ class Client extends BDDObject{
 
     protected $table = 'client';
 
+    public function payer_client($montant,$idclient){
+        $update = array(
+            'sortie' => $montant
+        );
+
+        $this->db->where('idclient', $idclient);
+        $this->db->update('porteMonnaie', $update);
+    }
+
+
+    public function getMvt($idclient){
+        $sql = "SELECT client.*,porteMonnaie.entree,porteMonnaie.sortie from client JOIN porteMonnaie 
+        ON client.idclient = porteMonnaie.idclient WHERE client.idclient = ".$idclient;
+    
+
+        $query = $this->db->query($sql);
+                
+        if ($query->num_rows() > 0) {
+            return $query->result();
+        } else {
+            return array();
+        }
+    }
+
+    public function getMontant($idclient){
+        $all = $this->getMvt($idclient);
+        $debit = 0;
+        $credit = 0;
+        foreach ($all as $a) {
+            $debit += $a->entree;
+            $credit += $a->sortie;
+        }
+
+        return $debit - $credit;
+
+    }
+
     public function se_connecter($mail, $password)
     {
         $this->db->where('email', $mail);

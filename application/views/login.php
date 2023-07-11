@@ -79,7 +79,7 @@
 					</div>
 					<div class="text-center txt2" >
 						<?php
-						if ($error) { ?>
+						if ( isset($error)) { ?>
 						 <p class="txt2"> <?php echo $error; ?> </>
 						<?php	}
 						?>

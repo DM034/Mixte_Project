@@ -1,38 +1,103 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Accueil extends CI_Controller {
+class Accueil extends CI_Controller
+{
 
-	public function accueil()
-	{
-		$this->load->view('accueil');
-	}		
+    public function __construct()
+    {
+        parent::__construct();
 
-    public function formLoginAdmin(){
-        $this->load->view('loginAdmin');
-    }
-
-    public function verifLoginAdmin(){
-        $this->form_validation->set_rules('email', 'mail', 'required|valid_email');
-        $this->form_validation->set_rules('pwd', 'mdp', 'required');
-
-        if($this->form_validation->run() === false){
-            $data['error'] = validation_errors();
-            $this->load->view('loginAdmin',$data);
-        } else {
-
-            $this->load->Model('Admin');
-            $flag = $this->Admin->loginValideAdmin($_POST['email'],$_POST['pwd']);
-
-            if($flag != false){
-                print_r('bienvenu');
-                // mandefa anaty session
-                // ...
-            } else {
-                $data['error'] = 'Erreur de mail ou mdp,reesayer';
-                $this->load->view('loginAdmin',$data);
-            }
+        if(!$this->session->userdata('isConnected')){
+            redirect('Welcome/index');          
         }
     }
 
+    public function accueil()
+    {
+        $this->load->Model('Profile');
+        $this->load->Model('Client');
+        $s = $this->session->client;
+
+        $client = $this->Profile->get_profile($s->idclient);
+
+
+        $data['client'] = $client;
+        $data['monnaie'] = $this->Client->getMontant($s->idclient);
+        $data['content']="hello";
+
+        $this->load->view('template', $data);
+    }
+
+    public function code()
+    {
+        $this->load->Model('Profile');
+        $this->load->Model('Client');
+        $s = $this->session->client;
+
+        $client = $this->Profile->get_profile($s->idclient);
+
+
+        $data['client'] = $client;
+        $data['monnaie'] = $this->Client->getMontant($s->idclient);
+
+        $this->load->Model('Code');
+        $data['allcode'] = $this->Code->getAllCode();
+        $data['content'] = "code";
+        $this->load->view('template', $data);
+    }
+
+
+    public function choix()
+    {
+        $this->load->Model('Profile');
+        $this->load->Model('Client');
+        $s = $this->session->client;
+
+        $client = $this->Profile->get_profile($s->idclient);
+
+
+        $data['client'] = $client;
+        $data['monnaie'] = $this->Client->getMontant($s->idclient);
+
+        $this->load->Model('Regime');
+        $choix1 = $this->Regime->getRegimeObjectif(1);
+        $choix2 = $this->Regime->getRegimeObjectif(2);
+
+
+        $data['content'] = "choix";
+        $data['choix1'] = $choix1;
+        $data['choix2'] = $choix2;
+        if(isset($_GET['error'])){
+            $data['error'] = "Monnaie insuffisant !";
+        }
+
+
+        $this->load->view('template', $data);
+    }
+
+    public function suggestion()
+    {
+        $this->load->Model('Profile');
+        $this->load->Model('Client');
+
+        $s = $this->session->client;
+
+        $client = $this->Profile->get_profile($s->idclient);
+
+        $data['monnaie'] = $this->Client->getMontant($s->idclient);
+        $data['client'] = $client;
+        $data['content'] = "suggestion";
+        $this->load->view('template', $data);
+    }
+
+
+
+   
+
+    public function test()
+    {
+        $data['content'] = 'listeSport';
+        $this->load->view('template', $data);
+    }
 }
