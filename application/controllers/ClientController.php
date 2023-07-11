@@ -18,6 +18,15 @@ class ClientController extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+  
+
+    
+    public function deconnexion() {
+        $client = $this->session->client; 
+        $this->session->sess_destroy();
+        redirect('Welcome/index');
+    }
+
     public function connecter(){
         $this->form_validation->set_rules('email', 'mail', 'required|valid_email');
         $this->form_validation->set_rules('pass', 'mot de passe', 'required');
@@ -31,9 +40,11 @@ class ClientController extends CI_Controller {
             $flag = $this->Client->se_connecter($_POST['email'],$_POST['pass']);
 
             if($flag != false){
-                print_r('bienvenu');
-                // mandefa anaty session
-                // ...
+                $this->session->set_userdata('client', $flag); 
+				$this->session->set_userdata('isConnected', 1);
+
+                redirect('Accueil/choix');
+
             } else {
                 $data['error'] = 'Verifier votre email ou mot de passe ';
                 $this->load->view('login',$data);
@@ -43,7 +54,7 @@ class ClientController extends CI_Controller {
 
     public function inscrire(){
         $this->form_validation->set_rules('email', 'mail', 'required|valid_email');
-        $this->form_validation->set_rules('mdp', 'mot de passe', 'required');
+        $this->form_validation->set_rules('pass', 'mot de passe', 'required');
         $this->form_validation->set_rules('taille','taille','required');
         $this->form_validation->set_rules('poids','poids','required');
         $this->form_validation->set_rules('nom','nom','required');
@@ -57,18 +68,16 @@ class ClientController extends CI_Controller {
 
             $this->load->Model('Client');
 
-            $this->Client->inscrire_utilisateur($_POST['email'],$_POST['mdp']);
+            $this->Client->inscrire_utilisateur($_POST['email'],$_POST['pass']);
 
             $idclient = $this->Client->idclient();
 
-            $flag = $this->Client->inscrire_profil($_POST['nom'],$_POST['prenom'],$_POST['dtn'],$_POST['genre'],$_POST['taille'],$_POST['poids'],$idclient);
+            $date = date('Y-m-d',strtotime($_POST['dtn']));
+
+            $flag = $this->Client->inscrire_profil($_POST['nom'],$_POST['prenom'],$date,$_POST['genre'],$_POST['taille'],$_POST['poids'],$idclient);
 
             if($flag != false){
-                print_r('bienvenue');
-                print_r($_POST['dtn']);
-            
-                // mandefa anaty session
-                // ...
+               $this->connecter();
             } else {
                 $data['error'] = 'Il y a eu une erreur';
                 $this->load->view('inscription',$data);
