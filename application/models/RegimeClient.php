@@ -30,7 +30,9 @@ class RegimeClient extends BDDObject
             'etat' => 1
         );
 
+
         $this->db->update('regimeClient', $data);
+
 
         if ($this->db->affected_rows() > 0) {
             return true;
@@ -47,7 +49,9 @@ class RegimeClient extends BDDObject
             'etat' => 0
         );
 
+
         $this->db->insert('regimeClient', $data);
+
 
         if ($this->db->affected_rows() > 0) {
             return true;

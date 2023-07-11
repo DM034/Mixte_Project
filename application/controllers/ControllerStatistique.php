@@ -16,6 +16,7 @@ class ControllerStatistique extends CI_Controller {
         $this->load->Model('Statistique');
 
         $val = $this->Statistique->getStatistiqueMontant();
+
         $date = "'";
         $montant = "'";
         for ($i=0; $i < count($val); $i++) {
@@ -24,6 +25,7 @@ class ControllerStatistique extends CI_Controller {
             if($i<count($val)-1){
                 $date = $date.",'";
                 $montant = $montant.",'";
+
             }
         }
 

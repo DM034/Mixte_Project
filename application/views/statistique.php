@@ -10,10 +10,7 @@
 </head>
 
 <body>
-    <?php
-        var_dump($date)."</br>";
-        var_dump($montant);
-    ?>
+
     <style>
         #chart1 {
             width: 350px;

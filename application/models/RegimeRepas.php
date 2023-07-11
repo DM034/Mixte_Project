@@ -3,7 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class RegimeRepas extends BDDObject {
 
+
     protected $table = 'regimeRepas';
+
 
     function get_regime_repas($idregime)
     {

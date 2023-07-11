@@ -176,6 +176,7 @@
                         <span class="mdi mdi-chevron-double-left"></span>
                     </button>
                     <ul class="navbar-nav navbar-nav-right">
+
                         
                         <li class="nav-item nav-logout d-none d-md-block">
                             <h2 style="margin-right: 15cm;">Regime</h2>
@@ -187,6 +188,7 @@
                             
                             <a class="nav-link text-danger font-weight-bold" href="<?php echo base_url('AdminController/deconnexion'); ?>">Log out</a>
                         </li>
+
                     </ul>
                     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
                         <span class="mdi mdi-menu"></span>
