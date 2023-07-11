@@ -122,6 +122,18 @@ class Code extends BDDObject {
         $this->db->insert('porteMonnaie',$data);
     }
 
+    public function insertHistorique($idclient,$montant){
+        $this->load->library('datetime');
+        $date = new DateTime();
+        $data = array(
+            'idclient'=>$idclient,
+            'montant'=>$montant,
+            'dateEntree'=>$date->format('Y-m-d')
+        );
+
+        $this->db->insert('historiqueEntree',$data);
+    }
+
 }
 
 ?>

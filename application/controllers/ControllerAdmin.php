@@ -4,24 +4,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class ControllerAdmin extends CI_Controller
 {
 
+    //------------------------ SPORT ------------------------------
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        if(!$this->session->userdata('isConnected')){
+            redirect('Welcome/index');          
+        }
+    }
+
     public function listeSports()
     {
         $this->load->Model('Sport');
 
         $data['allSport'] = $this->Sport->getAll("*");
+        $data['content'] = "list_sport";
 
-        $this->load->view('listeSport', $data);
+        $this->load->view('template_admin', $data);
     }
 
-    public function formInsererSport(){
+    public function formInsererSport()
+    {
         $this->load->Model('Objectif');
 
         $data['objectif'] = $this->Objectif->getAll("*");
+        $data['content'] = "ajout_sport";
 
-        $this->load->view('ajoutSport', $data);
+        $this->load->view('template_admin', $data);
     }
 
-    public function validerInsertionSport(){
+    public function validerInsertionSport()
+    {
         $this->form_validation->set_rules('nomsport', 'nom du sport', 'required');
         $this->form_validation->set_rules('objectif', 'objectif', 'required');
         $this->form_validation->set_rules('duree', 'duree', 'required');
@@ -34,8 +49,6 @@ class ControllerAdmin extends CI_Controller
             $data['objectif'] = $this->Objectif->getAll("*");
 
             $this->load->view('ajoutSport', $data);
-        
-        
         } else {
             $this->load->Model('Sport');
             $this->Sport->insertSport($_POST);
@@ -51,8 +64,9 @@ class ControllerAdmin extends CI_Controller
         $data['sport'] = $this->Sport->getAll('*', 'idsport =' . $idsport);
 
         $data['objectif'] = $this->Objectif->getAll("*");
+        $data['content'] = "sport_modif";
 
-        $this->load->view('modifSport', $data);
+        $this->load->view('template_admin', $data);
     }
 
     public function validerModif($idsport)
@@ -70,7 +84,9 @@ class ControllerAdmin extends CI_Controller
             $this->load->Model('Objectif');
             $data['sport'] = $this->Sport->getAll('*', 'idsport =' . $idsport);
             $data['objectif'] = $this->Objectif->getAll("*");
-            $this->load->view('modifSport', $data);
+            $data['content'] = "sport_modif";
+
+            $this->load->view('template_admin', $data);
         } else {
 
             $this->load->Model('Sport');
@@ -94,33 +110,38 @@ class ControllerAdmin extends CI_Controller
         $this->load->Model('Objectif');
         $data['sport'] = $this->Sport->getAll('*', 'idsport =' . $idsport);
         $data['objectif'] = $this->Objectif->getAll("*", 'idobjectif = ' . $data['sport'][0]->idobjectif);
-        $this->load->view('detailSport', $data);
+        $data['content'] = "detail_sport";
+        $this->load->view('template_admin', $data);
     }
 
 
-    //------------------------------------------------------
+    //------------------------ REGIME ------------------------------
 
     public function listeRegime()
     {
         $this->load->Model('Regime');
 
         $data['allRegime'] = $this->Regime->getAll("*");
+        $data['content'] = "list_regime";
 
-        $this->load->view('listeRegime', $data);
+        $this->load->view('template_admin', $data);
     }
 
-    public function formInsertionRegime(){
+    public function formInsertionRegime()
+    {
 
         $this->load->Model('Objectif');
         $this->load->Model('Repas');
 
         $data['repas'] = $this->Repas->getAll("*");
         $data['objectif'] = $this->Objectif->getAll("*");
+        $data['content'] = "ajout_regime";
 
-        $this->load->view('ajoutRegime',$data);
+        $this->load->view('template_admin', $data);
     }
 
-    public function validerInsertionRegime(){
+    public function validerInsertionRegime()
+    {
         $this->form_validation->set_rules('nom', 'nom du regime', 'required');
         $this->form_validation->set_rules('objectif', 'objectif', 'required');
         $this->form_validation->set_rules('duree', 'duree', 'required');
@@ -128,7 +149,7 @@ class ControllerAdmin extends CI_Controller
         $this->form_validation->set_rules('pu', 'prix unitaire', 'required');
         $this->form_validation->set_rules('idrepas[]', 'choisissez un repas', 'callback_check_checkbox');
 
-        
+
 
         if ($this->form_validation->run() === false) {
             $this->load->Model('Objectif');
@@ -137,12 +158,13 @@ class ControllerAdmin extends CI_Controller
             $data['repas'] = $this->Repas->getAll("*");
             $data['objectif'] = $this->Objectif->getAll("*");
             $data['error'] = validation_errors();
+            $data['content'] = "ajout_regime";
 
-            $this->load->view('ajoutRegime',$data);
-        }   
-        else{
+            $this->load->view('template_admin', $data);
+        } else {
             $this->load->Model('Regime');
             $this->Regime->insertRegime($_POST);
+            $this->listeRegime();
         }
     }
 
@@ -150,7 +172,8 @@ class ControllerAdmin extends CI_Controller
     {
         $this->load->Model('Regime');
         $data['regimeRepas'] = $this->Regime->getRepasRegime($idregime);
-        $this->load->view('detailRegime', $data);
+        $data['content'] = "detail_regime";
+        $this->load->view('template_admin', $data);
     }
 
     public function formModifRegime($idregime)
@@ -163,8 +186,9 @@ class ControllerAdmin extends CI_Controller
         $data['repas'] = $this->Repas->getAll("*");
         $data['allRegime'] = $this->Regime->getAll("*");
         $data['regimeRepas'] = $this->Regime->getRepasRegime($idregime);
+        $data['content'] = "regime_modif";
 
-        $this->load->view('modifRegime', $data);
+        $this->load->view('template_admin', $data);
     }
 
     public function check_checkbox($checkbox_values)
@@ -195,7 +219,8 @@ class ControllerAdmin extends CI_Controller
             $data['regimeRepas'] = $this->Regime->getRepasRegime($idregime);
             $data['error'] = validation_errors();
 
-            $this->load->view('modifRegime', $data);
+            $data['content'] = "regime_modif";
+            $this->load->view('template_admin', $data);;
         } else {
 
             $this->load->Model('Regime');
@@ -206,9 +231,13 @@ class ControllerAdmin extends CI_Controller
             $this->RegimeRepas->delete("idregime = " . $idregime);
 
             $idrepas = $_POST['idrepas'];
+
             for ($i = 0; $i < count($idrepas); $i++) {
+
                 $this->RegimeRepas->insertRegimeRepas($idregime, $idrepas[$i]);
+
             }
+            $this->detailRegime($idregime);
         }
     }
 
@@ -219,20 +248,24 @@ class ControllerAdmin extends CI_Controller
 
         $this->RegimeRepas->delete("idregime = " . $idregime);
         $this->Regime->delete("idregime = " . $idregime);
+        $this->listeRegime();
     }
 
-    // repas
+
+    //------------------------ REPAS ------------------------------
 
     public function listeRepas()
     {
         $this->load->Model('Repas');
         $data['allrepas'] = $this->Repas->getAll("*");
-        $this->load->view('listeRepas', $data);
+        $data['content'] = "list_repas";
+        $this->load->view('template_admin', $data);
     }
 
     public function formAjoutRepas()
     {
-        $this->load->view('ajoutRepas');
+        $data['content'] = "ajout_repas";
+        $this->load->view('template_admin', $data);
     }
 
     public function validerInsertionRepas()
@@ -241,10 +274,12 @@ class ControllerAdmin extends CI_Controller
         $this->form_validation->set_rules('repas', 'repas', 'required');
 
         if ($this->form_validation->run() === false) {
-            
+
             $data['error'] = validation_errors();
             $data['allrepas'] = $this->Repas->getAll("*");
-            $this->load->view('ajoutRepas', $data);
+
+            $data['content'] = "ajout_repas";
+            $this->load->view('template_admin', $data);
         } else {
             $config['upload_path'] = './fichiers/';
             $config['allowed_types'] = 'jpeg|jpg|png';
@@ -256,40 +291,48 @@ class ControllerAdmin extends CI_Controller
             if (!$this->upload->do_upload('photo')) {
                 $data['error'] = validation_errors();
                 $data['allrepas'] = $this->Repas->getAll("*");
-                $this->load->view('ajoutRepas', $data);
+
+                $data['content'] = "ajout_repas";
+                $this->load->view('template_admin', $data);
             } else {
                 $data = $this->upload->data();
-                $this->Repas->insertRepas($_POST,$data['file_name'], $config['upload_path'] . $data['file_name']);
+                $this->Repas->insertRepas($_POST, $data['file_name'], $config['upload_path'] . $data['file_name']);
+                $this->listeRepas();
             }
         }
     }
 
-    public function detailRepas($idrepas){
+    public function detailRepas($idrepas)
+    {
         $this->load->Model('Repas');
         $data['detail'] = $this->Repas->avoirRepasPhoto($idrepas);
-        $this->load->view('detailRepas',$data);
+        $this->load->view('detailRepas', $data);
     }
 
-    public function modifierRepas($idrepas){
+    public function modifierRepas($idrepas)
+    {
         $this->load->Model('Repas');
-        $data['detail'] = $this->Repas->getAll("*","idrepas =".$idrepas);
-        $this->load->view('modifierRepas',$data);
+        $data['detail'] = $this->Repas->getAll("*", "idrepas =" . $idrepas);
+
+        $data['content'] = "repas_modif";
+        $this->load->view('template_admin', $data);
     }
 
-    public function validerModifierRepas($idrepas){
+    public function validerModifierRepas($idrepas)
+    {
         $this->load->Model('Repas');
         $this->form_validation->set_rules('repas', 'repas', 'required');
         if ($this->form_validation->run() === false) {
-            
-            $data['error'] = validation_errors();
-            
-            $data['detail'] = $this->Repas->getAll("*");
-            $this->load->view('modifierRepas',$data);
 
+            $data['error'] = validation_errors();
+
+            $data['detail'] = $this->Repas->getAll("*");
+
+            $data['content'] = "repas_modif";
+            $this->load->view('template_admin', $data);
         } else {
-            $this->Repas->updateRepas($idrepas,$_POST);
+            $this->Repas->updateRepas($idrepas, $_POST);
             $this->listeRepas();
         }
     }
-
 }

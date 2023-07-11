@@ -6,9 +6,9 @@ class Regime extends BDDObject {
     protected $table = 'regime';
 
     public function getRepasRegime($idregime){
-        $sql = "select regimeRepas.*,regime.nom,regime.prixunitaire,regime.duree,regime.variationPoids,repas.nomrepas,objectif.idobjectif,objectif.nomobjectif from regimerepas 
-        join regime on regimerepas.idregime=regime.idregime 
-        join repas on regimerepas.idrepas=repas.idrepas
+        $sql = "select regimeRepas.*,regime.nom,regime.prixunitaire,regime.duree,regime.variationPoids,repas.nomrepas,objectif.idobjectif,objectif.nomobjectif from regimeRepas 
+        join regime on regimeRepas.idregime=regime.idregime 
+        join repas on regimeRepas.idrepas=repas.idrepas
         join objectif on regime.idobjectif=objectif.idobjectif WHERE regime.idregime = ".$idregime;
         $query = $this->db->query($sql);
         
@@ -54,6 +54,26 @@ class Regime extends BDDObject {
         }
         
 
+    }
+
+    public function getRegimeObjectif($idObjectif){
+        $this->db->where('idobjectif', $idObjectif);
+        $query = $this->db->get('regime');
+        return $query->result();
+        
+    }
+
+    public function getRegime_byid($idregime){
+        $this->db->where('idregime', $idregime);
+        $query = $this->db->get('regime');
+        return $query->result();
+    }
+
+    public function getSport($idObjectif){
+        $this->db->where('idobjectif', $idObjectif);
+        
+        $query = $this->db->get('sport');
+        return $query->result();
     }
 
 
